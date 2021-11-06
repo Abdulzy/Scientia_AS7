@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Asst7</string>
+    <string name="msg_token_fmt">FCM registration Token: %s</string>
 </resources>
