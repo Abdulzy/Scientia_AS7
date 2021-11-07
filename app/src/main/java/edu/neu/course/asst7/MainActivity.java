@@ -1,6 +1,7 @@
 package edu.neu.course.asst7;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -13,11 +14,16 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.CharArrayWriter;
+
+import edu.neu.course.asst7.data.User;
 
 public class MainActivity extends AppCompatActivity {
     private final static String TAG = "MainActivity";
@@ -71,16 +77,9 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO: Functionality add on: check if user with such name already exists or we override it
 
-        reference.child(un).setValue(user).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                Toast.makeText(MainActivity.this, "Data has been saved", Toast.LENGTH_SHORT).show();
-            }
-        });
+        reference.child(un)
+                .setValue(user)
+                .addOnFailureListener(e -> Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show())
+                .addOnSuccessListener(unused -> Toast.makeText(MainActivity.this, "Data has been saved", Toast.LENGTH_SHORT).show());
     }
 }
