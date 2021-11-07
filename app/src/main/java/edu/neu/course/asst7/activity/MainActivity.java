@@ -1,4 +1,4 @@
-package edu.neu.course.asst7;
+package edu.neu.course.asst7.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import edu.neu.course.asst7.R;
 import edu.neu.course.asst7.data.User;
 
 public class MainActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package edu.neu.course.asst7;
+package edu.neu.course.asst7.service;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,6 +9,8 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import edu.neu.course.asst7.R;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
