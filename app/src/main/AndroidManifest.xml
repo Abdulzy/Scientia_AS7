@@ -10,8 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Asst7">
         <activity
+
             android:name=".FCMActivity"
             android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
