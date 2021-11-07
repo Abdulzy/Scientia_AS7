@@ -5,13 +5,17 @@ import java.util.Objects;
 public class ReceivedHistory {
     public String userName;
     public int stickerId;
+    public String sender;
+    public String timeSent;
 
     public ReceivedHistory() {
     }
 
-    public ReceivedHistory(String userName, int stickerId) {
+    public ReceivedHistory(String userName, int stickerId, String sender, String timeSent) {
         this.userName = userName;
         this.stickerId = stickerId;
+        this.sender = sender;
+        this.timeSent = timeSent;
     }
 
     public String getUserName() {
@@ -30,17 +34,33 @@ public class ReceivedHistory {
         this.stickerId = stickerId;
     }
 
+    public String getSender() {
+        return sender;
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
+    }
+
+    public String getTimeSent() {
+        return timeSent;
+    }
+
+    public void setTimeSent(String timeSent) {
+        this.timeSent = timeSent;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ReceivedHistory that = (ReceivedHistory) o;
-        return stickerId == that.stickerId && Objects.equals(userName, that.userName);
+        return stickerId == that.stickerId && Objects.equals(userName, that.userName) && Objects.equals(sender, that.sender) && Objects.equals(timeSent, that.timeSent);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userName, stickerId);
+        return Objects.hash(userName, stickerId, sender, timeSent);
     }
 
     @Override
@@ -48,6 +68,8 @@ public class ReceivedHistory {
         return "ReceivedHistory{" +
                 "userName='" + userName + '\'' +
                 ", stickerId=" + stickerId +
+                ", sender='" + sender + '\'' +
+                ", timeSent='" + timeSent + '\'' +
                 '}';
     }
 }
