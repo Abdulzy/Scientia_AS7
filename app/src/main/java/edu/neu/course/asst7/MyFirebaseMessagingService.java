@@ -2,7 +2,6 @@ package edu.neu.course.asst7;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -38,7 +37,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
 
-            String channelId  = getString(R.string.channel_id);
+            String channelId = getString(R.string.channel_id);
             String channelName = getString(R.string.channel_name);
             NotificationManager notificationManager =
                     getSystemService(NotificationManager.class);

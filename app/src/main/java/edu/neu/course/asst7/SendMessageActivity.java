@@ -1,8 +1,8 @@
 package edu.neu.course.asst7;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class SendMessageActivity extends AppCompatActivity {
 
