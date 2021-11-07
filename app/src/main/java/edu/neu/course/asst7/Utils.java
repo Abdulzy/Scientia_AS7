@@ -21,7 +21,7 @@ import java.util.Properties;
  * The methods in this class are from demo app.
  */
 public class Utils {
-    public static Properties getProperties(Context context)  {
+    public static Properties getProperties(Context context) {
         Properties properties = new Properties();
         AssetManager assetManager = context.getAssets();
         InputStream inputStream = null;
@@ -35,7 +35,7 @@ public class Utils {
         return properties;
     }
 
-    public static void postToastMessage(final String message, final Context context){
+    public static void postToastMessage(final String message, final Context context) {
         Handler handler = new Handler(Looper.getMainLooper());
 
         handler.post(() -> Toast.makeText(context, message, Toast.LENGTH_LONG).show());

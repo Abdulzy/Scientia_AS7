@@ -42,6 +42,8 @@ public class SendMessageActivity extends AppCompatActivity {
     private void getData() {
         this.users = new LinkedList<>(); // TODO: Get all users from database and display who's available to send messages to
         this.stickers = new ArrayList<>(); // TODO: Get all available images from the database and display what can be sent
+
+        // TODO: populate the drop down menus with data from the server
     }
 
     public void createNotificationChannel() {
@@ -71,7 +73,7 @@ public class SendMessageActivity extends AppCompatActivity {
         JSONObject jPayload = new JSONObject();
         JSONObject jNotification = new JSONObject();
         JSONObject jdata = new JSONObject();
-        // TODO: convert to image
+        // TODO: change given example to image
         try {
             jNotification.put("title", "Message Title from 'SEND MESSAGE TO CLIENT BUTTON'");
             jNotification.put("body", "Message body from 'SEND MESSAGE TO CLIENT BUTTON'");
