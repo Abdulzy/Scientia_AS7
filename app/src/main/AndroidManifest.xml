@@ -14,7 +14,7 @@
             android:name=".FCMActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".SendMessageActivity"
             android:exported="true" />
 
         <activity

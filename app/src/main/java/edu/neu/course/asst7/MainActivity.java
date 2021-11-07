@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference reference;
     private String un;
     private CharArrayWriter e;
-
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     // Get new FCM registration token
-                    String token = task.getResult();
+                    token = task.getResult();
 
                     // Log and toast
                     String msg = getString(R.string.msg_token_fmt, token);
@@ -61,13 +61,16 @@ public class MainActivity extends AppCompatActivity {
     public void signin(View view) {
 
         createAccount(view);
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        Intent intent = new Intent(MainActivity.this, SendMessageActivity.class);
         startActivity(intent);
     }
 
     public void createAccount(View view) {
         un = username.getText().toString();
-        User user = new User(un);
+        User user = new User(un, token);
+
+        // TODO: Functionality add on: check if user with such name already exists or we override it
+
         reference.child(un).setValue(user).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
