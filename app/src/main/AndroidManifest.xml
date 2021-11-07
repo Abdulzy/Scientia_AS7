@@ -10,8 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Asst7">
         <activity
+
+            android:name=".FCMActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="true" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -20,7 +25,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity> <!-- [START firebase_service] -->
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

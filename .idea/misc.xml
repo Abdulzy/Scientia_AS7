@@ -3,11 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-en-rUS/notification_icon.xml" value="0.25104166666666666" />
+        <entry key="app/src/main/res/drawable/small_icon.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/activity_fcmactivity.xml" value="0.20643363728470113" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.16304347826086957" />
+        <entry key="app/src/main/res/layout/activity_notification.xml" value="0.19250253292806485" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
