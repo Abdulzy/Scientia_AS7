@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        reference = FirebaseDatabase.getInstance().getReference("credentials");
+        reference = FirebaseDatabase.getInstance().getReference("Users");
         username = findViewById(R.id.username_id);
         login_button = findViewById(R.id.login_id);
 
@@ -44,8 +44,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createAccount(View view) {
-        un = username.getText().toString().toLowerCase();
-        reference.child("Users").child("username").setValue(un).addOnFailureListener(new OnFailureListener() {
+        un = username.getText().toString();
+        User user = new User(un);
+        reference.child(un).setValue(user).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
