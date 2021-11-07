@@ -14,13 +14,12 @@ import edu.neu.course.asst7.R;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    private final static String TAG = "MyFirebaseMessagingService";
-
+    private static final String TAG = MyFirebaseMessagingService.class.getSimpleName();
 
     @Override
     public void onNewToken(@NonNull String s) {
         super.onNewToken(s);
-
+        // TODO: send token to database???
         Log.d(TAG, "Refreshed token: " + s);
     }
 
@@ -32,10 +31,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     @Override
+    public void onMessageSent(@NonNull String s) {
+        super.onMessageSent(s);
+    }
+
+    @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
+        showNotification(remoteMessage);
+    }
+
+    private void showNotification(@NonNull RemoteMessage remoteMessage) {
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
 
