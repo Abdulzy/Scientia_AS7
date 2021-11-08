@@ -15,6 +15,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -87,11 +88,28 @@ public class SendMessageActivity extends AppCompatActivity {
                 for (DataSnapshot stickerSnapshot : stickersSnapshot.getChildren()) {
                     Sticker sticker = stickerSnapshot.getValue(Sticker.class);
                     if (sticker != null) {
+                        downloadImage(stickerSnapshot.getKey());
                         stickers.put(sticker.name, sticker);
                     }
                 }
+            }
 
-                Log.i(TAG, "USERS COUNT " + users.size());
+            private void downloadImage(String id) {
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Images");
+                DatabaseReference image = databaseReference.child(id).child("location");
+
+                image.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String url = snapshot.getValue(String.class);
+                        Log.i(TAG, url);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.i(TAG, "Cancelled image download " + error.getMessage());
+                    }
+                });
             }
 
             @Override
@@ -123,32 +141,35 @@ public class SendMessageActivity extends AppCompatActivity {
             Log.i(TAG, "USERS ARE NULL");
             return;
         }
-        Log.i(TAG, "SENDING MESSAGE to " + "Josh");
         // TODO: select token based on the user's selected option
-        String recipientToken = "eUkqfxoLR0SiiLn0UvMYnv:APA91bGScCLCQZ8ZPFfZlbLAss7DOlCbgzdgySFN-0iob2xgUqoBOe4nYwsBwMN12_5D6V9yw27hgsUBE1u5SK_Q2rnPIfvSAV45_kT_pNXozWGsvfEDalZmOdxUiWbYkwVow1W8MHBr";
+        User recepient = new User();
+        recepient.username = "test";
+        recepient.token = "eUkqfxoLR0SiiLn0UvMYnv:APA91bGScCLCQZ8ZPFfZlbLAss7DOlCbgzdgySFN-0iob2xgUqoBOe4nYwsBwMN12_5D6V9yw27hgsUBE1u5SK_Q2rnPIfvSAV45_kT_pNXozWGsvfEDalZmOdxUiWbYkwVow1W8MHBr";
         int stickerId = 0; // TODO: get the sticker id from user's selection
 
-        new Thread(() -> sendMessageToDevice(recipientToken, stickerId)).start();
+        new Thread(() -> sendMessageToDevice(recepient, stickerId)).start();
     }
 
-    private void sendMessageToDevice(String recipientToken, int stickerId) {
+    private void sendMessageToDevice(User recipient, int stickerId) {
         // Prepare data
         JSONObject jPayload = new JSONObject();
         JSONObject jNotification = new JSONObject();
         JSONObject jdata = new JSONObject();
-        // TODO: change given example to image
         try {
-            jNotification.put("title", "Sticker id is " + stickerId);
-            jNotification.put("body", "Message body");
+            // Foreground
+            jNotification.put("title", "From " + getSender());
+            jNotification.put("body", stickerId);
             jNotification.put("sound", "default");
             jNotification.put("badge", "1");
 
-            jdata.put("title", "data title from 'SEND MESSAGE TO CLIENT BUTTON'");
-            jdata.put("content", "data content from 'SEND MESSAGE TO CLIENT BUTTON'");
+            // Background
+            jdata.put("title", "From " + getSender());
+            jdata.put("content", stickerId);
             jdata.put("sender", getSender());
+            jdata.put("receipent", recipient.username);
 
-            // If sending to a single client
-            jPayload.put("to", recipientToken);
+            // To whom
+            jPayload.put("to", recipient.token);
 
             jPayload.put("priority", "high");
             jPayload.put("notification", jNotification);
