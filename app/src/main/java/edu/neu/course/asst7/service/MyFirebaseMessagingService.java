@@ -2,6 +2,9 @@ package edu.neu.course.asst7.service;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.media.RingtoneManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -11,6 +14,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import edu.neu.course.asst7.R;
+import edu.neu.course.asst7.activity.ReceivedNotificationActivity;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -44,7 +48,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private void showNotification(@NonNull RemoteMessage remoteMessage) {
-        // TODO: add intent for action when notification is received
+        Intent intent = new Intent(this, ReceivedNotificationActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent, PendingIntent.FLAG_ONE_SHOT);
 
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
@@ -60,6 +65,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .setSmallIcon(R.drawable.small_icon_foreground)
                     .setContentTitle("New sticker from " + remoteMessage.getData().get("sender"))
                     .setContentText(remoteMessage.getNotification().getTitle())
+                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                    .setContentIntent(pendingIntent)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setAutoCancel(true);
 

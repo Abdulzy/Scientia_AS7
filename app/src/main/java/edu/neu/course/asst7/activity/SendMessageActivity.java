@@ -123,9 +123,9 @@ public class SendMessageActivity extends AppCompatActivity {
             Log.i(TAG, "USERS ARE NULL");
             return;
         }
-        Log.i(TAG, "SENDING MESSAGE to " + "Nadiia");
+        Log.i(TAG, "SENDING MESSAGE to " + "Josh");
         // TODO: select token based on the user's selected option
-        String recipientToken = "cHYVsBlFQfSlX7knGRRhHT:APA91bFECxYIMRGYIYRhDMZwnMx6GuhK66IwMp8a7T2qQ5LyO2FYm1HFGe2WfhHoU7IJlCV_K5aYGFQD6OGXrRK3oGWc1HUpc-sJc2bAEfe0YvKSB52m6i1NGpd0BhijJjV4NSLKMFby";
+        String recipientToken = "eUkqfxoLR0SiiLn0UvMYnv:APA91bGScCLCQZ8ZPFfZlbLAss7DOlCbgzdgySFN-0iob2xgUqoBOe4nYwsBwMN12_5D6V9yw27hgsUBE1u5SK_Q2rnPIfvSAV45_kT_pNXozWGsvfEDalZmOdxUiWbYkwVow1W8MHBr";
         int stickerId = 0; // TODO: get the sticker id from user's selection
 
         new Thread(() -> sendMessageToDevice(recipientToken, stickerId)).start();
