@@ -9,7 +9,7 @@ public class Sticker {
     public String name;
     public String location;
     public String token;
-    public String localFile;
+    public String localFilePath;
 
     public Sticker() {
     }
@@ -44,12 +44,12 @@ public class Sticker {
         this.token = token;
     }
 
-    public String getLocalFile() {
-        return localFile;
+    public String getLocalFilePath() {
+        return localFilePath;
     }
 
-    public void setLocalFile(String localFile) {
-        this.localFile = localFile;
+    public void setLocalFilePath(String localFilePath) {
+        this.localFilePath = localFilePath;
     }
 
     @Override
@@ -57,12 +57,12 @@ public class Sticker {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Sticker sticker = (Sticker) o;
-        return Objects.equals(name, sticker.name) && Objects.equals(location, sticker.location) && Objects.equals(token, sticker.token) && Objects.equals(localFile, sticker.localFile);
+        return Objects.equals(name, sticker.name) && Objects.equals(location, sticker.location) && Objects.equals(token, sticker.token) && Objects.equals(localFilePath, sticker.localFilePath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, location, token, localFile);
+        return Objects.hash(name, location, token, localFilePath);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class Sticker {
                 "name='" + name + '\'' +
                 ", location='" + location + '\'' +
                 ", token='" + token + '\'' +
-                ", localFile='" + localFile + '\'' +
+                ", localFile='" + localFilePath + '\'' +
                 '}';
     }
 }
