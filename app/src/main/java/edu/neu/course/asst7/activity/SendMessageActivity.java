@@ -19,11 +19,8 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.neu.course.asst7.R;
 import edu.neu.course.asst7.Utils;
@@ -35,8 +32,8 @@ public class SendMessageActivity extends AppCompatActivity {
     private final String TAG = "SendMessageActivity";
     private static String SERVER_KEY;
 
-    private Set<User> users;
-    private Set<Sticker> stickers;
+    private Map<String, User> users = new HashMap<>();
+    private Map<String, Sticker> stickers = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,21 +46,26 @@ public class SendMessageActivity extends AppCompatActivity {
         getData();
     }
 
+
     private void getData() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        getUsers(databaseReference);
-        getStickers(databaseReference);
+        Thread userThread = new Thread(() -> getUsers(databaseReference));
+        Thread stickerThread = new Thread(() -> getStickers(databaseReference));
+        userThread.start();
+        stickerThread.start();
     }
 
     private void getUsers(DatabaseReference databaseReference) {
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                users = new HashSet<>();
+                users = new HashMap<>();
                 DataSnapshot usersSnapshot = snapshot.child("Users");
                 for (DataSnapshot userSnapshot : usersSnapshot.getChildren()) {
                     User user = userSnapshot.getValue(User.class);
-                    users.add(user);
+                    if (user != null) {
+                        users.put(user.username, user);
+                    }
                 }
             }
 
@@ -80,12 +82,16 @@ public class SendMessageActivity extends AppCompatActivity {
         ValueEventListener valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                stickers = new HashSet<>();
+                stickers = new HashMap<>();
                 DataSnapshot stickersSnapshot = snapshot.child("Images");
                 for (DataSnapshot stickerSnapshot : stickersSnapshot.getChildren()) {
                     Sticker sticker = stickerSnapshot.getValue(Sticker.class);
-                    stickers.add(sticker);
+                    if (sticker != null) {
+                        stickers.put(sticker.name, sticker);
+                    }
                 }
+
+                Log.i(TAG, "USERS COUNT " + users.size());
             }
 
             @Override
@@ -113,10 +119,16 @@ public class SendMessageActivity extends AppCompatActivity {
     // TODO: add as event listener to the "Send" button in the view
     public void sendMessageToDevice(View view) {
         // TODO: get the recipient token based on what user is selected
-        String recipient = "ejspVuoQQsmZVfQh6xUKFg:APA91bGAUVYHeSgiujvPl9BE9wCsPSFgTPZtu_3JJGpInY_fuBXZEQSLiSEeuNDI1ZkuJ_58oP4JdAnzFVaYV_ZRb0Bt08F6Jsoe3T4-hUBpczbTdqrokgjrkAW0WAve9Ff-JECrun96";
+        if (users == null) {
+            Log.i(TAG, "USERS ARE NULL");
+            return;
+        }
+        Log.i(TAG, "SENDING MESSAGE to " + "Nadiia");
+        // TODO: select token based on the user's selected option
+        String recipientToken = "cHYVsBlFQfSlX7knGRRhHT:APA91bFECxYIMRGYIYRhDMZwnMx6GuhK66IwMp8a7T2qQ5LyO2FYm1HFGe2WfhHoU7IJlCV_K5aYGFQD6OGXrRK3oGWc1HUpc-sJc2bAEfe0YvKSB52m6i1NGpd0BhijJjV4NSLKMFby";
         int stickerId = 0; // TODO: get the sticker id from user's selection
 
-        new Thread(() -> sendMessageToDevice(recipient, stickerId)).start();
+        new Thread(() -> sendMessageToDevice(recipientToken, stickerId)).start();
     }
 
     private void sendMessageToDevice(String recipientToken, int stickerId) {
@@ -126,14 +138,14 @@ public class SendMessageActivity extends AppCompatActivity {
         JSONObject jdata = new JSONObject();
         // TODO: change given example to image
         try {
-            jNotification.put("title", "Message Title from 'SEND MESSAGE TO CLIENT BUTTON'");
-            jNotification.put("body", "Message body from 'SEND MESSAGE TO CLIENT BUTTON'");
+            jNotification.put("title", "Sticker id is " + stickerId);
+            jNotification.put("body", "Message body");
             jNotification.put("sound", "default");
             jNotification.put("badge", "1");
 
             jdata.put("title", "data title from 'SEND MESSAGE TO CLIENT BUTTON'");
             jdata.put("content", "data content from 'SEND MESSAGE TO CLIENT BUTTON'");
-
+            jdata.put("sender", getSender());
 
             // If sending to a single client
             jPayload.put("to", recipientToken);
@@ -146,8 +158,16 @@ public class SendMessageActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
         final String resp = Utils.fcmHttpConnection(SERVER_KEY, jPayload);
         Utils.postToastMessage("Status from Server: " + resp, getApplicationContext());
+    }
+
+    private String getSender() {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            return extras.getString("sender");
+        }
+
+        return "ERROR";
     }
 }

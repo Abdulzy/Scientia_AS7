@@ -38,12 +38,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Log.d(TAG, "FROM: " + remoteMessage.getData().get("sender"));
 
         showNotification(remoteMessage);
     }
 
     private void showNotification(@NonNull RemoteMessage remoteMessage) {
+        // TODO: add intent for action when notification is received
+
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
 
@@ -56,7 +58,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             NotificationCompat.Builder notifyBuild = new NotificationCompat.Builder(this, channelId)
                     .setSmallIcon(R.drawable.small_icon_foreground)
-                    .setContentTitle("New sticker from " + remoteMessage.getFrom())
+                    .setContentTitle("New sticker from " + remoteMessage.getData().get("sender"))
                     .setContentText(remoteMessage.getNotification().getTitle())
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setAutoCancel(true);

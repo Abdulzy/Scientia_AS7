@@ -1,7 +1,10 @@
 package edu.neu.course.asst7.data;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.util.Objects;
 
+@IgnoreExtraProperties
 public class User {
 
     public String username;
