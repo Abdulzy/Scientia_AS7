@@ -4,9 +4,17 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,10 +48,34 @@ public class SendMessageActivity extends AppCompatActivity {
     }
 
     private void getData() {
-        this.users = new LinkedList<>(); // TODO: Get all users from database and display who's available to send messages to
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        getUsers(databaseReference);
         this.stickers = new ArrayList<>(); // TODO: Get all available images from the database and display what can be sent
+    }
 
-        // TODO: populate the drop down menus with data from the server
+    private void getUsers(DatabaseReference databaseReference) {
+        this.users = new LinkedList<>();
+
+        ValueEventListener valueEventListener = new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                DataSnapshot usersSnapshot = snapshot.child("Users");
+                for (DataSnapshot userSnapshot : usersSnapshot.getChildren()) {
+                    User user = userSnapshot.getValue(User.class);
+                    users.add(user);
+                }
+
+                Log.i(TAG, "USERS FOUND: " + users.size());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.i(TAG, error.getMessage());
+            }
+        };
+
+        databaseReference.addValueEventListener(valueEventListener);
     }
 
     public void createNotificationChannel() {
