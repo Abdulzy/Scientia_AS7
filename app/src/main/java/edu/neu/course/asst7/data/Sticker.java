@@ -14,6 +14,12 @@ public class Sticker {
     public Sticker() {
     }
 
+    public Sticker(String name, String location, String token) {
+        this.name = name;
+        this.location = location;
+        this.token = token;
+    }
+
     public String getName() {
         return name;
     }
