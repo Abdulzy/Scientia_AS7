@@ -20,8 +20,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import edu.neu.course.asst7.R;
 import edu.neu.course.asst7.Utils;
@@ -33,8 +35,8 @@ public class SendMessageActivity extends AppCompatActivity {
     private final String TAG = "SendMessageActivity";
     private static String SERVER_KEY;
 
-    private List<User> users;
-    private List<Sticker> stickers;
+    private Set<User> users;
+    private Set<Sticker> stickers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,28 +52,45 @@ public class SendMessageActivity extends AppCompatActivity {
     private void getData() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         getUsers(databaseReference);
-        this.stickers = new ArrayList<>(); // TODO: Get all available images from the database and display what can be sent
+        getStickers(databaseReference);
     }
 
     private void getUsers(DatabaseReference databaseReference) {
-        this.users = new LinkedList<>();
-
         ValueEventListener valueEventListener = new ValueEventListener() {
-
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                users = new HashSet<>();
                 DataSnapshot usersSnapshot = snapshot.child("Users");
                 for (DataSnapshot userSnapshot : usersSnapshot.getChildren()) {
                     User user = userSnapshot.getValue(User.class);
                     users.add(user);
                 }
-
-                Log.i(TAG, "USERS FOUND: " + users.size());
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.i(TAG, error.getMessage());
+            }
+        };
+
+        databaseReference.addValueEventListener(valueEventListener);
+    }
+
+    private void getStickers(DatabaseReference databaseReference) {
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                stickers = new HashSet<>();
+                DataSnapshot stickersSnapshot = snapshot.child("Images");
+                for (DataSnapshot stickerSnapshot : stickersSnapshot.getChildren()) {
+                    Sticker sticker = stickerSnapshot.getValue(Sticker.class);
+                    stickers.add(sticker);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.i(TAG, error.toString());
             }
         };
 
