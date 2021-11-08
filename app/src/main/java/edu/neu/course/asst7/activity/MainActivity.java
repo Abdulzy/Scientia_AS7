@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         reference = FirebaseDatabase.getInstance().getReference("Users");
-
         username = findViewById(R.id.username_id);
 
     }

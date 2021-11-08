@@ -6,6 +6,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,10 +33,18 @@ import edu.neu.course.asst7.Utils;
 import edu.neu.course.asst7.data.Sticker;
 import edu.neu.course.asst7.data.User;
 
-public class SendMessageActivity extends AppCompatActivity {
+public class SendMessageActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private final String TAG = "SendMessageActivity";
     private static String SERVER_KEY;
+    private Button button1;
+    private Button button2;
+    private Button button3;
+    private Button button4;
+    private Spinner spinner;
+    private ArrayList spinnerList;
+    private ArrayAdapter<String> adapter;
+
 
     private Map<String, User> users = new HashMap<>();
     private Map<String, Sticker> stickers = new HashMap<>();
@@ -39,11 +53,23 @@ public class SendMessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sendmessage);
+        button1 = findViewById(R.id.button1);
+        button2 = findViewById(R.id.button2);
+        button3 = findViewById(R.id.button3);
+        button4 = findViewById(R.id.button4);
+        spinner = findViewById(R.id.spinner_id);
 
         SERVER_KEY = "key=" + Utils.getProperties(getApplicationContext()).getProperty("SERVER_KEY");
 
         createNotificationChannel();
         getData();
+        spinnerList = new ArrayList<>();
+        adapter = new ArrayAdapter<>(SendMessageActivity.this, android.R.layout.simple_spinner_dropdown_item, spinnerList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
+        adapter.notifyDataSetChanged();
+
     }
 
 
@@ -67,6 +93,8 @@ public class SendMessageActivity extends AppCompatActivity {
                         users.put(user.username, user);
                     }
                 }
+                spinnerList.addAll(users.keySet());
+
             }
 
             @Override
@@ -169,5 +197,16 @@ public class SendMessageActivity extends AppCompatActivity {
         }
 
         return "ERROR";
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        String text = adapterView.getItemAtPosition(i).toString();
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }
