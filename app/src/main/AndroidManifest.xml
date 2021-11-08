@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.neu.course.asst7">
+    package="edu.neu.course.asst7" >
 
     <application
         android:allowBackup="true"
@@ -8,18 +8,19 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Asst7">
+        android:theme="@style/Theme.Asst7" >
         <activity
-
+            android:name=".activity.History"
+            android:exported="true" />
+        <activity
             android:name=".FCMActivity"
             android:exported="false" />
         <activity
             android:name=".activity.SendMessageActivity"
             android:exported="true" />
-
         <activity
             android:name=".activity.MainActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +29,7 @@
         </activity> <!-- [START firebase_service] -->
         <service
             android:name=".service.MyFirebaseMessagingService"
-            android:exported="false">
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
