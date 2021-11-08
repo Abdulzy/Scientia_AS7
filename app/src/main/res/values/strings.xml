@@ -4,4 +4,7 @@
     <string name="channel_name">Assignment7</string>
     <string name="channel_description">Notification Channel for the assignment 7 app</string>
     <string name="channel_id">channel_assignment7</string>
+    <string name="message_sticker">sticker sent</string>
+    <string name="message_sender">User who sent</string>
+    <string name="message_time">Time message was sent</string>
 </resources>

@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "589562093045",
+    "firebase_url": "https://assignment7-be4aa-default-rtdb.firebaseio.com",
     "project_id": "assignment7-be4aa",
     "storage_bucket": "assignment7-be4aa.appspot.com"
   },
@@ -10,35 +11,6 @@
         "mobilesdk_app_id": "1:589562093045:android:7e0671e0b6a483777bd4bc",
         "android_client_info": {
           "package_name": "edu.neu.course.asst7"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "589562093045-kepc5tt2ir0hh4upike0dvpt5hng8nih.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyA6Thh0zA1gciEUZ1J_j9G-ghH6YWYPxu8"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "589562093045-kepc5tt2ir0hh4upike0dvpt5hng8nih.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:589562093045:android:30c44945288fef2c7bd4bc",
-        "android_client_info": {
-          "package_name": "edu.neu.course.firebase_proj"
         }
       },
       "oauth_client": [
