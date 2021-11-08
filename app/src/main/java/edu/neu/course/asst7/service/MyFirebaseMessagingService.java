@@ -56,10 +56,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             String channelId = getString(R.string.channel_id);
             String channelName = getString(R.string.channel_name);
-            NotificationManager notificationManager =
-                    getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(new NotificationChannel(channelId,
-                    channelName, NotificationManager.IMPORTANCE_LOW));
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT));
 
             NotificationCompat.Builder notifyBuild = new NotificationCompat.Builder(this, channelId)
                     .setSmallIcon(R.drawable.small_icon_foreground)

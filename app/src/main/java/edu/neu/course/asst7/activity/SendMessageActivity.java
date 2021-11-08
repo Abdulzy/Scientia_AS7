@@ -2,6 +2,9 @@ package edu.neu.course.asst7.activity;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,11 +17,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,22 +95,26 @@ public class SendMessageActivity extends AppCompatActivity {
                 DataSnapshot stickersSnapshot = snapshot.child("Images");
                 for (DataSnapshot stickerSnapshot : stickersSnapshot.getChildren()) {
                     Sticker sticker = stickerSnapshot.getValue(Sticker.class);
+                    String filePath = getApplicationContext().getDir("img", Context.MODE_PRIVATE) +  "/" + sticker.name + ".png";
+                    sticker.localFilePath = filePath;
                     if (sticker != null) {
-                        downloadImage(stickerSnapshot.getKey());
+                        downloadImage(stickerSnapshot.getKey(), filePath);
                         stickers.put(sticker.name, sticker);
                     }
                 }
             }
 
-            private void downloadImage(String id) {
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Images");
-                DatabaseReference image = databaseReference.child(id).child("location");
+            private void downloadImage(String id, String filePath) {
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Images").child(id);
 
-                image.addListenerForSingleValueEvent(new ValueEventListener() {
+                databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String url = snapshot.getValue(String.class);
-                        Log.i(TAG, url);
+                        GenericTypeIndicator<Map<String, String>> genericTypeIndicator = new GenericTypeIndicator<Map<String, String>>() {};
+                        Map<String, String> map = snapshot.getValue(genericTypeIndicator );
+                        String url = map.get("token");
+                        File myImageFile = new File(filePath);
+                        download(myImageFile, url);
                     }
 
                     @Override
@@ -109,6 +122,42 @@ public class SendMessageActivity extends AppCompatActivity {
                         Log.i(TAG, "Cancelled image download " + error.getMessage());
                     }
                 });
+            }
+
+            private void download(File file, String url) {
+                Picasso.get().load(url).into(getTarget(file));
+            }
+
+            private Target getTarget(File myImageFile) {
+                return new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        FileOutputStream fos = null;
+                        try {
+                            fos = new FileOutputStream(myImageFile);
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            try {
+                                fos.close();
+                            } catch (IOException e) {
+                                Log.i(TAG, myImageFile.getAbsolutePath());
+                            }
+                        }
+                        Log.i(TAG, "IMAGE SAVED TO " + myImageFile.getAbsolutePath());
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                        Log.i(TAG, "Bitmap load failed: " + e.getMessage() );
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        Log.i(TAG, "Bitmap prepared to load ");
+                    }
+                };
             }
 
             @Override

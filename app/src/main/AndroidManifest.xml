@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.neu.course.asst7" >
+    package="edu.neu.course.asst7">
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,9 +13,6 @@
         <activity
             android:name=".activity.History"
             android:exported="true" />
-        <activity
-            android:name=".FCMActivity"
-            android:exported="false" />
         <activity
             android:name=".activity.SendMessageActivity"
             android:exported="true" />
