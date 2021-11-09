@@ -1,5 +1,7 @@
 package edu.neu.course.asst7.service;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,9 +13,16 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import edu.neu.course.asst7.R;
@@ -48,8 +57,29 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         Log.d(TAG, "FROM: " + remoteMessage.getData().get("sender"));
-
+        updateHistory(remoteMessage);
         showNotification(remoteMessage);
+    }
+    private void updateHistory(@NonNull RemoteMessage remoteMessage){
+        Date time = Calendar.getInstance().getTime();
+        String sender = remoteMessage.getData().get("sender");
+        String sticker = remoteMessage.getData().get("content");
+        String receiver = remoteMessage.getData().get("receiver");
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://assignment7-be4aa-default-rtdb.firebaseio.com/");
+        DatabaseReference userHistory = database.getReference().child("Users").child(receiver).child("history").child(String.valueOf(time));
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userHistory.child("senderName").setValue(sender);
+                userHistory.child("sticker").setValue(sticker);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d(TAG, error.getMessage());
+            }
+        };
+        userHistory.addValueEventListener(eventListener);
     }
 
     private void showNotification(@NonNull RemoteMessage remoteMessage) {
