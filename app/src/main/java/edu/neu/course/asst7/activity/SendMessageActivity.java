@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -61,6 +62,10 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
     private User receiver;
     private String receiverToken;
     private String stickerId;
+    private ImageView image1;
+    private ImageView image2;
+    private ImageView image3;
+    private ImageView image4;
 
     private Map<String, User> users = new HashMap<>();
     private Map<String, Sticker> stickers = new HashMap<>();
@@ -69,10 +74,16 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sendmessage);
-        button1 = findViewById(R.id.button1);
-        button2 = findViewById(R.id.button2);
-        button3 = findViewById(R.id.button3);
-        button4 = findViewById(R.id.button4);
+//        button1 = findViewById(R.id.button1);
+        image1 = findViewById(R.id.imageViewAngry);
+        image2 = findViewById(R.id.imageViewCool);
+        image3 = findViewById(R.id.imageViewCry);
+        image4 = findViewById(R.id.imageViewJoy);
+//
+//
+//        button2 = findViewById(R.id.button2);
+//        button3 = findViewById(R.id.button3);
+//        button4 = findViewById(R.id.button4);
         spinner = findViewById(R.id.spinner_id);
         sticker1 = new SentStickersCount("anger");
         sticker2 = new SentStickersCount("cool");
@@ -97,7 +108,7 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
-        button1.setOnClickListener(new View.OnClickListener() {
+        image1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int count = sticker1.incrementcount();
@@ -110,8 +121,22 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                 sendMessageToDevice(view);
             }
         });
+//
+//        button1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                int count = sticker1.incrementcount();
+//                stickerTotalCount = stickerTotalCount + 1;
+//                text1.setText(String.valueOf(count));
+//                totalCountValue.setText(String.valueOf(stickerTotalCount));
+//                mDatabase.child(senderUser).child("sticker1").setValue(sticker1);
+//                mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
+//                stickerId = sticker1.getStickerId();
+//                sendMessageToDevice(view);
+//            }
+//        });
 
-        button2.setOnClickListener(new View.OnClickListener() {
+        image2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int count = sticker2.incrementcount();
@@ -126,7 +151,7 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
             }
         });
 
-        button3.setOnClickListener(new View.OnClickListener() {
+        image3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int count = sticker3.incrementcount();
@@ -141,7 +166,7 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
             }
         });
 
-        button4.setOnClickListener(new View.OnClickListener() {
+        image4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 int count = sticker4.incrementcount();
@@ -238,7 +263,8 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
         }
         // TODO: select token based on the user's selected option
         User recepient = receiver;
-        recepient.username = recepient.getUsername();
+        recepient.setUsername(receiver.getUsername());
+        recepient.setToken(receiver.getToken());
         recepient.token = receiverToken;
         // TODO: get the sticker id from user's selection
 
@@ -261,6 +287,7 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
             jdata.put("title", "From " + getSender());
             jdata.put("content", stickerName);
             jdata.put("sender", getSender());
+            jdata.put("receiver", recipient.getUsername());
 
             // To whom
             jPayload.put("to", recipient.token);
@@ -274,7 +301,7 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
         }
 
         final String resp = Utils.fcmHttpConnection(SERVER_KEY, jPayload);
-        Utils.postToastMessage("Status from Server: " + resp, getApplicationContext());
+//        Utils.postToastMessage("Status from Server: " + resp, getApplicationContext());
     }
 
     private String getSender() {
@@ -292,7 +319,7 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
             String text = adapterView.getItemAtPosition(i).toString();
             receiver = users.get(text);
             receiverToken = receiver.getToken();
-            Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+//            Toast.makeText(this, text, Toast.LENGTH_LONG).show();
         }
 
     }
