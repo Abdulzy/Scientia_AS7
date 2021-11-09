@@ -4,19 +4,19 @@ import java.util.Objects;
 
 public class SentStickersCount {
     //    public String username;
-    public int stickerId;
+    public String stickerId;
     public int count;
 
     public SentStickersCount() {
     }
 
-    public SentStickersCount(int stickerId) {
+    public SentStickersCount(String stickerId) {
 
         this.stickerId = stickerId;
         this.count = 0;
     }
 
-    public SentStickersCount(String username, int stickerId) {
+    public SentStickersCount(String username, String stickerId) {
         this(stickerId);
     }
 //
@@ -28,11 +28,11 @@ public class SentStickersCount {
 //        this.username = username;
 //    }
 
-    public int getStickerId() {
+    public String getStickerId() {
         return stickerId;
     }
 
-    public void setStickerId(int stickerId) {
+    public void setStickerId(String stickerId) {
         this.stickerId = stickerId;
     }
 

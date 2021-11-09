@@ -74,10 +74,10 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
         button3 = findViewById(R.id.button3);
         button4 = findViewById(R.id.button4);
         spinner = findViewById(R.id.spinner_id);
-        sticker1 = new SentStickersCount(1);
-        sticker2 = new SentStickersCount(2);
-        sticker3 = new SentStickersCount(3);
-        sticker4 = new SentStickersCount(4);
+        sticker1 = new SentStickersCount("anger");
+        sticker2 = new SentStickersCount("cool");
+        sticker3 = new SentStickersCount("cry");
+        sticker4 = new SentStickersCount("joy");
         text1 = findViewById(R.id.sticker1Score);
         text2 = findViewById(R.id.sticker2Score);
         text3 = findViewById(R.id.sticker3Score);
@@ -106,7 +106,7 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                 totalCountValue.setText(String.valueOf(stickerTotalCount));
                 mDatabase.child(senderUser).child("sticker1").setValue(sticker1);
                 mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
-                stickerId = String.valueOf(sticker1.getStickerId());
+                stickerId = sticker1.getStickerId();
                 sendMessageToDevice(view);
             }
         });
@@ -120,7 +120,8 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                 text2.setText(String.valueOf(count));
                 mDatabase.child(senderUser).child("sticker2").setValue(sticker2);
                 mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
-                stickerId = String.valueOf(sticker2.getStickerId());
+                stickerId = sticker2.getStickerId();
+                sendMessageToDevice(view);
 
             }
         });
@@ -134,7 +135,8 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                 text3.setText(String.valueOf(count));
                 mDatabase.child(senderUser).child("sticker3").setValue(sticker3);
                 mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
-                stickerId = String.valueOf(sticker3.getStickerId());
+                stickerId = sticker3.getStickerId();
+                sendMessageToDevice(view);
 
             }
         });
@@ -148,9 +150,8 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                 text4.setText(String.valueOf(count));
                 mDatabase.child(senderUser).child("sticker4").setValue(sticker4);
                 mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
-                stickerId = String.valueOf(sticker4.getStickerId());
-
-
+                stickerId = sticker4.getStickerId();
+                sendMessageToDevice(view);
             }
         });
     }
