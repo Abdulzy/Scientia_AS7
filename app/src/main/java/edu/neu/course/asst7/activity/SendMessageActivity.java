@@ -17,6 +17,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -61,6 +63,9 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
     private EditText text3;
     private EditText text4;
     private EditText totalCountValue;
+    private User receiver;
+    private String receiverToken;
+    private String stickerId;
 
     private Map<String, User> users = new HashMap<>();
     private Map<String, Sticker> stickers = new HashMap<>();
@@ -106,7 +111,8 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                 totalCountValue.setText(String.valueOf(stickerTotalCount));
                 mDatabase.child(senderUser).child("sticker1").setValue(sticker1);
                 mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
-
+                stickerId = String.valueOf(sticker1.getStickerId());
+                sendMessageToDevice(view);
             }
         });
 
@@ -119,6 +125,8 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                 text2.setText(String.valueOf(count));
                 mDatabase.child(senderUser).child("sticker2").setValue(sticker2);
                 mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
+                stickerId = String.valueOf(sticker2.getStickerId());
+                sendMessageToDevice(view);
 
             }
         });
@@ -132,6 +140,9 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                 text3.setText(String.valueOf(count));
                 mDatabase.child(senderUser).child("sticker3").setValue(sticker3);
                 mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
+                stickerId = String.valueOf(sticker3.getStickerId());
+                sendMessageToDevice(view);
+
             }
         });
 
@@ -144,6 +155,8 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                 text4.setText(String.valueOf(count));
                 mDatabase.child(senderUser).child("sticker4").setValue(sticker4);
                 mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
+                stickerId = String.valueOf(sticker4.getStickerId());
+                sendMessageToDevice(view);
 
             }
         });
@@ -229,32 +242,34 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
             Log.i(TAG, "USERS ARE NULL");
             return;
         }
-        Log.i(TAG, "SENDING MESSAGE to " + "Josh");
         // TODO: select token based on the user's selected option
-        String recipientToken = "eUkqfxoLR0SiiLn0UvMYnv:APA91bGScCLCQZ8ZPFfZlbLAss7DOlCbgzdgySFN-0iob2xgUqoBOe4nYwsBwMN12_5D6V9yw27hgsUBE1u5SK_Q2rnPIfvSAV45_kT_pNXozWGsvfEDalZmOdxUiWbYkwVow1W8MHBr";
-        int stickerId = 0; // TODO: get the sticker id from user's selection
+        User recepient = receiver;
+        recepient.username = recepient.getUsername();
+        recepient.token = receiverToken;
+        // TODO: get the sticker id from user's selection
 
-        new Thread(() -> sendMessageToDevice(recipientToken, stickerId)).start();
+        new Thread(() -> sendMessageToDevice(recepient, stickerId)).start();
     }
 
-    private void sendMessageToDevice(String recipientToken, int stickerId) {
+    private void sendMessageToDevice(User recipient, String stickerName) {
         // Prepare data
         JSONObject jPayload = new JSONObject();
         JSONObject jNotification = new JSONObject();
         JSONObject jdata = new JSONObject();
-        // TODO: change given example to image
         try {
-            jNotification.put("title", "Sticker id is " + stickerId);
-            jNotification.put("body", "Message body");
+            // Foreground
+            jNotification.put("title", "From " + getSender());
+            jNotification.put("body", stickerId);
             jNotification.put("sound", "default");
             jNotification.put("badge", "1");
 
-            jdata.put("title", "data title from 'SEND MESSAGE TO CLIENT BUTTON'");
-            jdata.put("content", "data content from 'SEND MESSAGE TO CLIENT BUTTON'");
+            // Background
+            jdata.put("title", "From " + getSender());
+            jdata.put("content", stickerName);
             jdata.put("sender", getSender());
 
-            // If sending to a single client
-            jPayload.put("to", recipientToken);
+            // To whom
+            jPayload.put("to", recipient.token);
 
             jPayload.put("priority", "high");
             jPayload.put("notification", jNotification);
@@ -276,16 +291,13 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
 
         return "ERROR";
     }
-
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
         if(adapterView.getItemAtPosition(i) != null) {
             String text = adapterView.getItemAtPosition(i).toString();
-            User receiver = users.get(text);
-            String receiverToken = receiver.getToken();
-            Toast.makeText(this, "receiver token " + receiverToken, Toast.LENGTH_SHORT).show();
-            Log.d("TAG", "text****** " + text);
+            receiver = users.get(text);
+            receiverToken = receiver.getToken();
             Toast.makeText(this, text, Toast.LENGTH_LONG).show();
         }
 
