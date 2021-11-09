@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -53,6 +54,7 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
     private SentStickersCount sticker3;
     private SentStickersCount sticker4;
     private int stickerTotalCount;
+    private TextView welcome;
     private EditText text1;
     private EditText text2;
     private EditText text3;
@@ -69,6 +71,7 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sendmessage);
+        welcome = findViewById(R.id.welcomeMessage_id);
         button1 = findViewById(R.id.button1);
         button2 = findViewById(R.id.button2);
         button3 = findViewById(R.id.button3);
@@ -86,6 +89,7 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
         Intent intent = getIntent();
         String senderUser = intent.getStringExtra("sender");
         String senderToken = intent.getStringExtra("token");
+        welcome.setText("Welcome "+ senderUser  );
 
         SERVER_KEY = "key=" + Utils.getProperties(getApplicationContext()).getProperty("SERVER_KEY");
         createNotificationChannel();
@@ -216,6 +220,14 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
         databaseReference.addValueEventListener(valueEventListener);
     }
 
+    public void history(View view) {
+        Intent intent = new Intent(this, History.class);
+        Bundle extra = getIntent().getExtras();
+        String user = extra.getString("sender");
+        intent.putExtra("sender", user);
+        startActivity(intent);
+    }
+
     public void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
@@ -257,10 +269,14 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
             jNotification.put("sound", "default");
             jNotification.put("badge", "1");
 
+
+            Log.d(TAG, "this is the: " + recipient.getUsername());
+            Log.d(TAG, "this is the: " + recipient.getToken());
             // Background
             jdata.put("title", "From " + getSender());
             jdata.put("content", stickerName);
             jdata.put("sender", getSender());
+            jdata.put("receiver", recipient.getUsername());
 
             // To whom
             jPayload.put("to", recipient.token);
