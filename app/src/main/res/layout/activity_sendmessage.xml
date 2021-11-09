@@ -45,7 +45,7 @@
     <Spinner
         android:id="@+id/spinner_id"
         android:layout_width="147dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -106,7 +106,7 @@
     <EditText
         android:id="@+id/sticker1Score"
         android:layout_width="88dp"
-        android:layout_height="47dp"
+        android:layout_height="48dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text=""
@@ -115,7 +115,8 @@
         app:layout_constraintHorizontal_bias="0.176"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button1"
-        app:layout_constraintVertical_bias="0.657" />
+        app:layout_constraintVertical_bias="0.657"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <EditText
         android:id="@+id/sticker2Score"
@@ -129,12 +130,13 @@
         app:layout_constraintHorizontal_bias="0.791"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button2"
-        app:layout_constraintVertical_bias="0.857" />
+        app:layout_constraintVertical_bias="0.857"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <EditText
         android:id="@+id/sticker3Score"
         android:layout_width="91dp"
-        android:layout_height="44dp"
+        android:layout_height="48dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text=""
@@ -143,7 +145,8 @@
         app:layout_constraintHorizontal_bias="0.178"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button3"
-        app:layout_constraintVertical_bias="0.25" />
+        app:layout_constraintVertical_bias="0.25"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <EditText
         android:id="@+id/sticker4Score"
@@ -157,7 +160,8 @@
         app:layout_constraintHorizontal_bias="0.795"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button4"
-        app:layout_constraintVertical_bias="0.307" />
+        app:layout_constraintVertical_bias="0.307"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/totalStickercount_id"
@@ -174,7 +178,7 @@
     <EditText
         android:id="@+id/totalStickercountValue"
         android:layout_width="62dp"
-        android:layout_height="46dp"
+        android:layout_height="48dp"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -182,6 +186,7 @@
         app:layout_constraintHorizontal_bias="0.464"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.616" />
+        app:layout_constraintVertical_bias="0.616"
+        tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
