@@ -15,12 +15,26 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
  * The methods in this class are from demo app.
  */
 public class Utils {
+    private static Map<String, Integer> stickers;
+
+    public static Map<String, Integer> getStickersMap() {
+        if (stickers != null) {
+            return stickers;
+        } else {
+            stickers = new HashMap<>();
+            getStickers();
+            return stickers;
+        }
+    }
+
     public static Properties getProperties(Context context) {
         Properties properties = new Properties();
         AssetManager assetManager = context.getAssets();
@@ -79,5 +93,17 @@ public class Utils {
             e.printStackTrace();
         }
         return "";
+    }
+
+    private static void getStickers() {
+        stickers.put("anger",  R.drawable.anger);
+        stickers.put("cool",  R.drawable.cool);
+        stickers.put("cry",  R.drawable.cry);
+        stickers.put("joy",  R.drawable.joy);
+        stickers.put("smile",  R.drawable.smile);
+        stickers.put("scream",  R.drawable.scream);
+        stickers.put("suprise",  R.drawable.suprise);
+        stickers.put("thinking",  R.drawable.thinking);
+        stickers.put("thumbs", R.drawable.thumbs);
     }
 }

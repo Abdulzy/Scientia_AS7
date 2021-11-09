@@ -3,7 +3,9 @@ package edu.neu.course.asst7.data;
 import java.util.Objects;
 
 public class SentStickersCount {
+
 //    public String username;
+
     public int stickerId;
     public int count;
 
