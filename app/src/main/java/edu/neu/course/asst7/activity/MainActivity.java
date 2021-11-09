@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         createAccount(view);
         Intent intent = new Intent(MainActivity.this, SendMessageActivity.class);
         intent.putExtra("sender", username.getText().toString());
+        intent.putExtra("token", token);
         startActivity(intent);
     }
 

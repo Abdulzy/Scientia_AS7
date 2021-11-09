@@ -2,6 +2,7 @@ package edu.neu.course.asst7.activity;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,16 +10,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
@@ -30,6 +35,7 @@ import java.util.Map;
 
 import edu.neu.course.asst7.R;
 import edu.neu.course.asst7.Utils;
+import edu.neu.course.asst7.data.SentStickersCount;
 import edu.neu.course.asst7.data.Sticker;
 import edu.neu.course.asst7.data.User;
 
@@ -44,7 +50,17 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
     private Spinner spinner;
     private ArrayList spinnerList;
     private ArrayAdapter<String> adapter;
-
+    private DatabaseReference mDatabase;
+    private SentStickersCount sticker1;
+    private SentStickersCount sticker2;
+    private SentStickersCount sticker3;
+    private SentStickersCount sticker4;
+    private int stickerTotalCount;
+    private EditText text1;
+    private EditText text2;
+    private EditText text3;
+    private EditText text4;
+    private EditText totalCountValue;
 
     private Map<String, User> users = new HashMap<>();
     private Map<String, Sticker> stickers = new HashMap<>();
@@ -58,20 +74,80 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
         button3 = findViewById(R.id.button3);
         button4 = findViewById(R.id.button4);
         spinner = findViewById(R.id.spinner_id);
+        sticker1 = new SentStickersCount(1);
+        sticker2 = new SentStickersCount(2);
+        sticker3 = new SentStickersCount(3);
+        sticker4 = new SentStickersCount(4);
+        text1 = findViewById(R.id.sticker1Score);
+        text2 = findViewById(R.id.sticker2Score);
+        text3 = findViewById(R.id.sticker3Score);
+        text4 = findViewById(R.id.sticker4Score);
+        totalCountValue = findViewById(R.id.totalStickercountValue);
+        Intent intent = getIntent();
+        String senderUser = intent.getStringExtra("sender");
+        String senderToken = intent.getStringExtra("token");
 
         SERVER_KEY = "key=" + Utils.getProperties(getApplicationContext()).getProperty("SERVER_KEY");
-
         createNotificationChannel();
+        mDatabase = FirebaseDatabase.getInstance().getReference("Users");
         getData();
         spinnerList = new ArrayList<>();
         adapter = new ArrayAdapter<>(SendMessageActivity.this, android.R.layout.simple_spinner_dropdown_item, spinnerList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-        adapter.notifyDataSetChanged();
 
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int count = sticker1.incrementcount();
+                stickerTotalCount = stickerTotalCount + 1;
+                text1.setText(String.valueOf(count));
+                totalCountValue.setText(String.valueOf(stickerTotalCount));
+                mDatabase.child(senderUser).child("sticker1").setValue(sticker1);
+                mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
+
+            }
+        });
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int count = sticker2.incrementcount();
+                stickerTotalCount = stickerTotalCount + 1;
+                totalCountValue.setText(String.valueOf(stickerTotalCount));
+                text2.setText(String.valueOf(count));
+                mDatabase.child(senderUser).child("sticker2").setValue(sticker2);
+                mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
+
+            }
+        });
+
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int count = sticker3.incrementcount();
+                stickerTotalCount = stickerTotalCount + 1;
+                totalCountValue.setText(String.valueOf(stickerTotalCount));
+                text3.setText(String.valueOf(count));
+                mDatabase.child(senderUser).child("sticker3").setValue(sticker3);
+                mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
+            }
+        });
+
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int count = sticker4.incrementcount();
+                stickerTotalCount = stickerTotalCount + 1;
+                totalCountValue.setText(String.valueOf(stickerTotalCount));
+                text4.setText(String.valueOf(count));
+                mDatabase.child(senderUser).child("sticker4").setValue(sticker4);
+                mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
+
+            }
+        });
     }
-
 
     private void getData() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -93,8 +169,11 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                         users.put(user.username, user);
                     }
                 }
+                if (users.containsKey(null)) {
+                    users.remove(null);
+                }
                 spinnerList.addAll(users.keySet());
-
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -118,7 +197,6 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                         stickers.put(sticker.name, sticker);
                     }
                 }
-
                 Log.i(TAG, "USERS COUNT " + users.size());
             }
 
@@ -201,8 +279,16 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        String text = adapterView.getItemAtPosition(i).toString();
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+
+        if(adapterView.getItemAtPosition(i) != null) {
+            String text = adapterView.getItemAtPosition(i).toString();
+            User receiver = users.get(text);
+            String receiverToken = receiver.getToken();
+            Toast.makeText(this, "receiver token " + receiverToken, Toast.LENGTH_SHORT).show();
+            Log.d("TAG", "text****** " + text);
+            Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+        }
+
     }
 
     @Override
