@@ -17,10 +17,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
@@ -121,6 +126,8 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                 mDatabase.child(senderUser).child("sticker2").setValue(sticker2);
                 mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
                 stickerId = String.valueOf(sticker2.getStickerId());
+                sendMessageToDevice(view);
+
 
             }
         });
@@ -135,6 +142,8 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                 mDatabase.child(senderUser).child("sticker3").setValue(sticker3);
                 mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
                 stickerId = String.valueOf(sticker3.getStickerId());
+                sendMessageToDevice(view);
+
 
             }
         });
@@ -148,8 +157,13 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                 text4.setText(String.valueOf(count));
                 mDatabase.child(senderUser).child("sticker4").setValue(sticker4);
                 mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
-                stickerId = String.valueOf(sticker4.getStickerId());
+                stickerId = String.valueOf(sticker4.getStickerId())
+                sendMessageToDevice(view);
 
+
+            }
+        });
+    }
 
             }
         });

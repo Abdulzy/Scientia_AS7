@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         reference = FirebaseDatabase.getInstance().getReference("Users");
-
         username = findViewById(R.id.username_id);
 
     }
@@ -56,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         createAccount(view);
         Intent intent = new Intent(MainActivity.this, SendMessageActivity.class);
         intent.putExtra("sender", username.getText().toString());
+        intent.putExtra("token", token);
         startActivity(intent);
     }
 
