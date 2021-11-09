@@ -157,7 +157,7 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                 text4.setText(String.valueOf(count));
                 mDatabase.child(senderUser).child("sticker4").setValue(sticker4);
                 mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
-                stickerId = String.valueOf(sticker4.getStickerId())
+                stickerId = String.valueOf(sticker4.getStickerId());
                 sendMessageToDevice(view);
 
 
@@ -165,9 +165,6 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
         });
     }
 
-            }
-        });
-    }
 
     private void getData() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
