@@ -10,12 +10,14 @@ public class User {
     public String username;
     public String token;
 
+
     public User() {
     }
 
     public User(String username, String token) {
         this.username = username;
         this.token = token;
+
     }
 
     public String getUsername() {
@@ -55,3 +57,4 @@ public class User {
                 '}';
     }
 }
+
