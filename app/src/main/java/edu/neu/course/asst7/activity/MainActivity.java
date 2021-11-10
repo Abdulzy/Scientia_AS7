@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                     // Log and toast
                     String msg = getString(R.string.msg_token_fmt, token);
                     Log.d(TAG, msg);
-                    Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                 });
 
         reference = FirebaseDatabase.getInstance().getReference("Users");
@@ -55,29 +55,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void signin(View view) {
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference reference = database.getReference("Users");
 
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.hasChild(username.getText().toString())) {
-                    createAccount(view);
+
+        if (username.getText().toString().isEmpty()) {
+            Toast.makeText(MainActivity.this, "Please enter the username", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference reference = database.getReference("Users");
+
+            reference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (!snapshot.hasChild(username.getText().toString())) {
+                        createAccount(view);
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
 
-        Intent intent = new Intent(MainActivity.this, SendMessageActivity.class);
-        intent.putExtra("sender", username.getText().toString());
-        intent.putExtra("token", token);
-        startActivity(intent);
+                }
+
+            });
+
+
+            Intent intent = new Intent(MainActivity.this, SendMessageActivity.class);
+            intent.putExtra("sender", username.getText().toString());
+            intent.putExtra("token", token);
+            startActivity(intent);
+        }
+
     }
 
     public void createAccount(View view) {

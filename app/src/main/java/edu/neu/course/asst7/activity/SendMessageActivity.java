@@ -43,10 +43,6 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
 
     private final String TAG = "SendMessageActivity";
     private static String SERVER_KEY;
-    private Button button1;
-    private Button button2;
-    private Button button3;
-    private Button button4;
     private Spinner spinner;
     private ArrayList spinnerList;
     private ArrayAdapter<String> adapter;
@@ -180,9 +176,6 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
         DatabaseReference Sticker4 = database.getReference().child("Users").child(user).child("sticker4");
 
 
-
-
-
         Sticker1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -283,9 +276,11 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                 users = new HashMap<>();
                 DataSnapshot usersSnapshot = snapshot.child("Users");
                 for (DataSnapshot userSnapshot : usersSnapshot.getChildren()) {
-                    User user = userSnapshot.getValue(User.class);
-                    if (user != null) {
-                        users.put(user.username, user);
+                    String userName = userSnapshot.child("username").getValue(String.class);
+                    String userToken = userSnapshot.child("token").getValue(String.class);
+                    User user = new User(userName, userToken);
+                    if (userName != null && userToken != null) {
+                        users.put(userName, user);
                     }
                 }
                 if (users.containsKey(null)) {

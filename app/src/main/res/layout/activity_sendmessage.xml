@@ -31,7 +31,8 @@
         app:layout_constraintBottom_toTopOf="@+id/spinner_id"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/welcomeMessage_id"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="TouchTargetSizeCheck" />
 
 
     <TextView
@@ -58,7 +59,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/receiverName_id"
         app:layout_constraintTop_toBottomOf="@+id/receiveScreen_id"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <TextView
         android:id="@+id/totalStickercount_id"
@@ -83,7 +84,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/totalStickercount_id"
         app:layout_constraintTop_toBottomOf="@+id/spinner_id"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <ImageView
         android:id="@+id/imageViewAngry"
@@ -110,25 +111,25 @@
         android:id="@+id/sticker1Score"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:text=""
         android:gravity="center"
+        android:text=""
         app:layout_constraintBottom_toTopOf="@+id/imageViewCry"
         app:layout_constraintEnd_toStartOf="@+id/sticker2Score"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewAngry"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <EditText
         android:id="@+id/sticker2Score"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:text=""
         android:gravity="center"
+        android:text=""
         app:layout_constraintBottom_toTopOf="@+id/imageViewJoy"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/sticker1Score"
         app:layout_constraintTop_toBottomOf="@+id/imageViewCool"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <ImageView
         android:id="@+id/imageViewCry"
@@ -154,25 +155,25 @@
         android:id="@+id/sticker3Score"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:text=""
         android:gravity="center"
+        android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sticker4Score"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewCry"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <EditText
         android:id="@+id/sticker4Score"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:text=""
         android:gravity="center"
+        android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/sticker3Score"
         app:layout_constraintTop_toBottomOf="@+id/imageViewJoy"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
 
 
