@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import edu.neu.course.asst7.R;
 import edu.neu.course.asst7.Utils;
@@ -66,6 +68,9 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
     private ImageView image2;
     private ImageView image3;
     private ImageView image4;
+    private TextView welcome;
+    private String currentUser;
+    private String total;
 
     private Map<String, User> users = new HashMap<>();
     private Map<String, Sticker> stickers = new HashMap<>();
@@ -74,21 +79,21 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sendmessage);
-//        button1 = findViewById(R.id.button1);
+        Bundle extra = getIntent().getExtras();
+        currentUser = extra.getString("sender");
+        welcome = findViewById(R.id.welcomeMessage_id);
+        welcome.setText( currentUser + ",Welcome !!!!");
         image1 = findViewById(R.id.imageViewAngry);
         image2 = findViewById(R.id.imageViewCool);
         image3 = findViewById(R.id.imageViewCry);
         image4 = findViewById(R.id.imageViewJoy);
-//
-//
-//        button2 = findViewById(R.id.button2);
-//        button3 = findViewById(R.id.button3);
-//        button4 = findViewById(R.id.button4);
+
         spinner = findViewById(R.id.spinner_id);
         sticker1 = new SentStickersCount("anger");
         sticker2 = new SentStickersCount("cool");
         sticker3 = new SentStickersCount("cry");
         sticker4 = new SentStickersCount("joy");
+        getCount(currentUser);
         text1 = findViewById(R.id.sticker1Score);
         text2 = findViewById(R.id.sticker2Score);
         text3 = findViewById(R.id.sticker3Score);
@@ -121,20 +126,6 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                 sendMessageToDevice(view);
             }
         });
-//
-//        button1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                int count = sticker1.incrementcount();
-//                stickerTotalCount = stickerTotalCount + 1;
-//                text1.setText(String.valueOf(count));
-//                totalCountValue.setText(String.valueOf(stickerTotalCount));
-//                mDatabase.child(senderUser).child("sticker1").setValue(sticker1);
-//                mDatabase.child(senderUser).child("TotalStickerCount").setValue(stickerTotalCount);
-//                stickerId = sticker1.getStickerId();
-//                sendMessageToDevice(view);
-//            }
-//        });
 
         image2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,6 +170,102 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
                 sendMessageToDevice(view);
             }
         });
+    }
+
+    public void getCount(String user) {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference Sticker1 = database.getReference().child("Users").child(user).child("sticker1");
+        DatabaseReference Sticker2 = database.getReference().child("Users").child(user).child("sticker2");
+        DatabaseReference Sticker3 = database.getReference().child("Users").child(user).child("sticker3");
+        DatabaseReference Sticker4 = database.getReference().child("Users").child(user).child("sticker4");
+
+
+
+
+
+        Sticker1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChild("count")) {
+                    stickerTotalCount = stickerTotalCount - sticker1.getCount();
+                    sticker1.setCount((snapshot.child("count").getValue(Integer.class)));
+                    stickerTotalCount =  stickerTotalCount + sticker1.getCount();
+                    text1.setText(String.valueOf(sticker1.getCount()));
+                    totalCountValue.setText(String.valueOf(stickerTotalCount));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+
+            }
+        });
+
+        Sticker2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChild("count")) {
+                    stickerTotalCount = stickerTotalCount - sticker2.getCount();
+                    sticker2.setCount((snapshot.child("count").getValue(Integer.class)));
+                    stickerTotalCount =  stickerTotalCount + sticker2.getCount();
+                    text2.setText(String.valueOf(sticker2.getCount()));
+                    totalCountValue.setText(String.valueOf(stickerTotalCount));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+
+            }
+        });
+
+        Sticker3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChild("count")) {
+                    stickerTotalCount = stickerTotalCount - sticker3.getCount();
+                    sticker3.setCount((snapshot.child("count").getValue(Integer.class)));
+                    stickerTotalCount =  stickerTotalCount + sticker3.getCount();
+                    text3.setText(String.valueOf(sticker3.getCount()));
+                    totalCountValue.setText(String.valueOf(stickerTotalCount));
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+
+            }
+        });
+
+        Sticker4.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChild("count")) {
+                    stickerTotalCount = stickerTotalCount - sticker4.getCount();
+                    sticker4.setCount((snapshot.child("count").getValue(Integer.class)));
+                    stickerTotalCount =  stickerTotalCount + sticker4.getCount();
+                    text4.setText(String.valueOf(sticker4.getCount()));
+                    totalCountValue.setText(String.valueOf(stickerTotalCount));
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+
+            }
+        });
+    }
+
+    public void history(View view) {
+        Intent intent = new Intent(this, History.class);
+        intent.putExtra("sender", currentUser);
+        startActivity(intent);
     }
 
     private void getData() {
@@ -319,7 +406,6 @@ public class SendMessageActivity extends AppCompatActivity implements AdapterVie
             String text = adapterView.getItemAtPosition(i).toString();
             receiver = users.get(text);
             receiverToken = receiver.getToken();
-//            Toast.makeText(this, text, Toast.LENGTH_LONG).show();
         }
 
     }

@@ -55,8 +55,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void signin(View view) {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference reference = database.getReference("Users");
 
-        createAccount(view);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.hasChild(username.getText().toString())) {
+                    createAccount(view);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+
+            }
+        });
+
 
         Intent intent = new Intent(MainActivity.this, SendMessageActivity.class);
         intent.putExtra("sender", username.getText().toString());
